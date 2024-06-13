@@ -4,17 +4,19 @@ import { logger } from "../logger";
 /**
  * Wrangler can provide Node.js compatibility in a number of different modes:
  * - "legacy" - this mode adds compile-time polyfills that are not well maintained and cannot work with workerd runtime builtins.
+ * - "als": this mode tells the workerd runtime to enable only the Async Local Storage builtin library (accessible via `node:async_hooks`).
  * - "v1" - this mode tells the workerd runtime to enable some Node.js builtin libraries (accessible only via `node:...` imports) but no globals.
  * - "v2" - this mode tells the workerd runtime to enable more Node.js builtin libraries (accessible both with and without the `node:` prefix)
  *   and also some Node.js globals such as `Buffer`; it also turns on additional compile-time polyfills for those that are not provided by the runtime.
  */
-export type NodeJSCompatMode = "legacy" | "v1" | "v2" | null;
+export type NodeJSCompatMode = "legacy" | "als" | "v1" | "v2" | null;
 
 /**
  * Validate and compute the Node.js compatibility mode we are running.
  *
  * Returns one of:
  *  - "legacy": build-time polyfills, from `node_compat` flag
+ *  - "als": nodejs_als compatibility flag
  *  - "v1": nodejs_compat compatibility flag
  *  - "v2": experimental nodejs_compat_v2 flag
  *  - null: no Node.js compatibility
@@ -100,6 +102,9 @@ export function validateNodeCompat({
 	}
 	if (legacyNodeCompat) {
 		return "legacy";
+	}
+	if (compatibilityFlags.includes("nodejs_als")) {
+		return "als";
 	}
 	return null;
 }
