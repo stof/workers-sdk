@@ -748,7 +748,7 @@ const verifyBuildScript = async (
 	await sleep(7000);
 
 	// Make a request to the specified test route
-	const res = await fetch(`http://localhost:${TEST_PORT}${route}`);
+	const res = await fetch(`http://127.0.0.1:${TEST_PORT}${route}`);
 	const body = await res.text();
 
 	// Kill the process gracefully so ports can be cleaned up
