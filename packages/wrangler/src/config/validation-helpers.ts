@@ -596,7 +596,7 @@ const isRecord = (
 /**
  * JavaScript `typeof` operator return values.
  */
-type TypeofType =
+export type TypeofType =
 	| "string"
 	| "number"
 	| "bigint"
